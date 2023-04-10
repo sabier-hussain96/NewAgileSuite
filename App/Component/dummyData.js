@@ -328,4 +328,67 @@ export const activity = [
 ]
 
 
+export const leaveStatus = [
+  {
+    id: '1',
+    leaves: '48',
+    title: 'Total leaves',
+    // bgColor: '#FF2D55',
+    // textColor: '#FAFAFA'
+  },
+  {
+    id: '2',
+    leaves: '24',
+    title: 'Earned Leave',
+    // bgColor: '#FF2D55',
+    // textColor: '#FAFAFA'
+  },
+  {
+    id: '3',
+    leaves: '12',
+    title: 'Casual Leave',
+    // bgColor: '#017BFF',
+    // textColor: '#FAFAFA'
+  },
+  {
+    id: '4',
+    leaves: '12',
+    title: 'Sick Leave',
+    // bgColor: '#FF9401',
+    // textColor: '#FAFAFA'
+
+  },
+];
+
+
+ export const appliedLeaveList = [
+    {
+      id: 1,
+      month: "November",
+      year: 2019,
+      leaveApplied: "half day",
+      date: "wed 16,Nov",
+      leaveType: "Casual",
+      status: "awaiting"
+    },
+    {
+      id: 2,
+      month: "October",
+      year: 2019,
+      leaveApplied: "Full day",
+      date: "wed 18,Oct",
+      leaveType: "Sick",
+      status: "approved"
+    },
+    {
+      id: 3,
+      month: "August",
+      year: 2019,
+      leaveApplied: "Full day",
+      date: "wed 18,Oct",
+      leaveType: "Earned",
+      status: "cancelled"
+    }
+  ]
+
 

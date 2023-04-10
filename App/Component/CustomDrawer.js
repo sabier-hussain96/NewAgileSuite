@@ -1,19 +1,14 @@
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
-import { useNavigation } from '@react-navigation/native'
-import React, { useEffect } from 'react'
-import { View, Image, Text, TouchableOpacity } from 'react-native'
-import CancelIcon from '../Assets/Icons/CancelIcon'
-import Logout from 'react-native-vector-icons/Ionicons'
-import { Colors, Styles } from '../Global/ApplicationCss'
-import { ICONSIZES, screenNames, SIZES } from '../Constants/Constants'
-import { DrawerActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setClientToken } from '../api/Api'
-import * as EndPoint from '../api/Endpoints'
-import { GET } from '../api/ApiMethods'
-import Toast from 'react-native-simple-toast';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
+import { DrawerActions } from '@react-navigation/native'
+import React from 'react'
+import { Image, Text, TouchableOpacity, View } from 'react-native'
+import Logout from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
-import { employeeData } from './dummyData'
+import CancelIcon from '../Assets/Icons/CancelIcon'
+import { ICONSIZES, screenNames } from '../Constants/Constants'
+import { Colors, Styles } from '../Global/ApplicationCss'
+
 
 const CustomDrawer = (props) => {
   // console.log("custome drawer ===== ", emplyoeeData)
@@ -25,9 +20,9 @@ const CustomDrawer = (props) => {
         <View style={Styles.customDrawMainView}>
           {/* Image and user details */}
           <View >
-            <View style={{ justifyContent: "center" }}>
+            {/* <View style={{ justifyContent: "center" }}>
               <Image source={require('../Assets/Images/User.webp')} style={Styles.custDrawUserImage}></Image>
-            </View>
+            </View> */}
             <View style={Styles.userTextView}>
               <Text style={Styles.userText}>Shaik Hussain</Text>
               <Text style={Styles.userRoleText}>@pixsellz</Text>
@@ -60,10 +55,11 @@ const CustomDrawer = (props) => {
   )
 }
 
-
 const mapStateToProps = (state) => {
   return {
     emplyoeeData: state.emplyoeeData
   }
 }
+
+
 export default connect(mapStateToProps, null)(CustomDrawer)

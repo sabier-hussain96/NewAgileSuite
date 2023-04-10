@@ -141,8 +141,7 @@ export const Styles = StyleSheet.create({
         flexDirection: "row",
         elevation: 5,
         backgroundColor: "#F5F5F5",
-        padding: 15
-
+        padding: 15,alignItems:"center"
     },
 
     // leave related CSS

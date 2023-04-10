@@ -7,10 +7,10 @@ import { connect } from 'react-redux'
 import { setClientToken } from '../api/Api'
 import { screenNames } from '../Constants/Constants'
 import { Styles } from '../Global/ApplicationCss'
-import { EmplyoeeData } from '../Redux/Actions/commonActions'
+import {storeUserData} from '../Redux/Actions/commonActions'
 
-const SplashScreen = ({ EmplyoeeData}) => {
 
+const SplashScreen = ({storeUserData}) => {
   const navigation = useNavigation();
   useEffect(() => {
     setTimeout(() => {
@@ -20,42 +20,28 @@ const SplashScreen = ({ EmplyoeeData}) => {
 
   const checkToken = async () => {
     const token = await AsyncStorage.getItem('token')
-    if (Boolean(token)) {
+    const usersData = await AsyncStorage.getItem('user_Data');
+    if (Boolean(token) && Boolean(usersData)) {
       setClientToken(token);
-      getEmplyoeeDetail()
+      storeUserData(JSON.parse(usersData));
       navigation.replace(screenNames.DashBoard)
-
     } else {
       navigation.replace(screenNames.Login)
     }
   }
 
 
-  const getEmplyoeeDetail = () => {
-    EmplyoeeData(async response => {
-    })
-  }
-
   return (
     <View style={[Styles.mainConatiner, Styles.splashView]}>
       <Lottie source={require('../Global/Animation/Portfolio.json')} autoPlay loop style={{ height: 300, width: 300 }} />
-
     </View>
   )
 }
 
-const mapStateToProps = state => ({
-  empData: state.emplyoeeData
-});
-
-
 const mapDispatchToProps = dispatch => {
   return {
-    EmplyoeeData: (onResponse) =>
-      dispatch(EmplyoeeData(onResponse)),
-  };
-};
+      storeUserData: (userData) => dispatch(storeUserData(userData)),
+  }
+}
 
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
+export default connect(null,mapDispatchToProps)(SplashScreen)

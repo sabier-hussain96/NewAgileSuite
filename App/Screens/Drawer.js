@@ -6,11 +6,13 @@ import CalendarIcon from '../Assets/Icons/CalendarIcon';
 import { HomeIcon } from '../Assets/Icons/HomeIcon';
 import { ProfileIcon } from '../Assets/Icons/ProfileIcon';
 import CustomDrawer from '../Component/CustomDrawer';
-import { screenNames } from '../Constants/Constants';
+import { ICONSIZES, screenNames } from '../Constants/Constants';
 import { Colors } from '../Global/ApplicationCss';
 import HomeScreen from './HomeScreen';
 import ProfileScreen from './ProfileScreen';
 import TimeSheet from './TimeSheet';
+import LeaveApplication from './LeaveApplication';
+import Entypo from 'react-native-vector-icons/Entypo'
 
 
 const Drawer = createDrawerNavigator();
@@ -18,12 +20,14 @@ const Drawer = createDrawerNavigator();
 const DrawerNavPage = () => {
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />} screenOptions={{unmountInactiveRoutes: true,}} >
-        <Drawer.Screen name={screenNames.Home_screen} component={HomeScreen} options={{headerShown:false,unmountOnBlur: true ,drawerIcon:({focused})=>(
+        <Drawer.Screen name={screenNames.Home_screen} component={HomeScreen} options={{headerShown:false,unmountOnBlur: true,drawerIcon:({focused})=>(
           <HomeIcon stroke={focused?Colors.primary:Colors.secondary}/>)}} />
         <Drawer.Screen name={screenNames.Profile_screen} component={ProfileScreen} options={{headerShown:false,unmountOnBlur: true,drawerIcon:({focused})=>(
           <ProfileIcon stroke={focused?Colors.primary:Colors.secondary}/>)}} />
         <Drawer.Screen name={screenNames.Time_Sheet} component={TimeSheet} options={{headerShown:false,unmountOnBlur: true, drawerIcon:({focused})=>(
           <CalendarIcon stroke={focused?Colors.primary:Colors.secondary}/>)}}/>
+        <Drawer.Screen name={screenNames.Leaves} component={LeaveApplication} options={{headerShown:false,unmountOnBlur: true, drawerIcon:({focused})=>(
+          <Entypo name='direction'  size={ICONSIZES.normal} stroke={focused?Colors.primary:Colors.secondary}/>)}}/>
     </Drawer.Navigator>
   )
 }

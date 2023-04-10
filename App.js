@@ -10,6 +10,7 @@ import Login from './App/Screens/Login';
 import ResetPin from './App/Screens/ResetPin';
 import SplashScreen from './App/Screens/SplashScreen';
 import TimeSheetForm from './App/Screens/TimeSheetForm';
+import LeaveUsed from './App/Screens/LeaveUsed';
 import Store from './App/Redux/Store'
 
 
@@ -26,6 +27,7 @@ const App = () => {
         <Stack.Screen name={screenNames.Login} component={Login} options={header_Shown}/>
         <Stack.Screen name={screenNames.Reset_Pin} component={ResetPin} options={header_Shown}/>
         <Stack.Screen name={screenNames.DashBoard} component={DrawerNavPage} options={header_Shown}/>
+        <Stack.Screen name={screenNames.Leaves_Used} component={LeaveUsed} options={{headerShown:true}}/>
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

@@ -5,6 +5,7 @@ const initialState = {
 };
 
 const commonReducer = (state = initialState, action) => {
+    // console.log(action)
     switch (action.type) {
         case 'STORE_USER_DATA':
             return { ...state, userData: action.payload };

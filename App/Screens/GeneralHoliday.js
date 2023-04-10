@@ -32,17 +32,6 @@ const GeneralHoliday = () => {
 
     <View style={[Styles.mainConatiner, { padding: 5 }]}>
 
-      {/* Picking the year */}
-
-      {/* <View style={[Styles.yearListView]}>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={Styles.yearList} >Year</Text>
-        </View>
-        <View style={{ width: "25%",elevation:10 }}>
-          <CustomDropDown />
-        </View>
-      </View> */}
-
 {/* List og General Holidays. */}
       <FlatList
         data={holidayList} contentContainerStyle={{ paddingBottom: 20 }} renderItem={({ item }) => (
@@ -63,13 +52,4 @@ const GeneralHoliday = () => {
   )
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     holidayList: state.holidayList
-//   }
-// }
-
-
-
-export default
-  (GeneralHoliday)
+export default (GeneralHoliday)

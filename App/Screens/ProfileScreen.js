@@ -1,16 +1,43 @@
-import React, { useRef, useState } from 'react'
-import { Animated, FlatList, Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import moment from "moment"
+import React, { useEffect, useRef, useState } from 'react'
+import { Animated, FlatList, Image, ScrollView, Text, View } from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import IonIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { connect } from 'react-redux'
+import { GET } from '../api/ApiMethods'
+import * as EndPoint from '../api/Endpoints'
 import Header from '../Component/Header'
 import { ICONSIZES } from '../Constants/Constants'
 import { Colors, Styles } from '../Global/ApplicationCss'
-import moment from "moment";
+import { storeEmplyoeeData } from '../Redux/Actions/commonActions'
 
 
-const ProfileScreen = ({ emplyoeeData }) => {
+const ProfileScreen = ({ userData,storeEmplyoeeData }) => {
+  const [emplyoeeData, setemplyoeeData] = useState([])
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      fetchEmployeDetail()
+    }
+
+    return () => {
+      mounted = false;
+    }
+  }, [])
+
+  const fetchEmployeDetail = async () => {
+    const endpoints = `${EndPoint.employee_details_URL}?id=${userData.emp_id}`
+    GET(endpoints, response => {
+      if (response.data.status === 'S') {
+        storeEmplyoeeData(response.data.employee_data)
+        setemplyoeeData(response.data.employee_data)
+      }
+
+    });
+  }
+
+
 
   const joiningDate = moment(emplyoeeData.Joining_date).format("DD/MM/YYYY")
   // const dob = moment(emplyoeeData.)
@@ -20,7 +47,6 @@ const ProfileScreen = ({ emplyoeeData }) => {
   const [visible, setVisible] = useState(false)
 
   const uploadImage = () => {
-    // console.log("modallll")
     setVisible(true)
 
   }
@@ -30,9 +56,9 @@ const ProfileScreen = ({ emplyoeeData }) => {
       width: 300,
       height: 400,
       cropping: true
-      }).then(image => {
-        console.log(image);
-        console.log("Image2",image.path);
+    }).then(image => {
+      // console.log(image);
+      // console.log("Image2",image.path);
     });
     setVisible(false)
   }
@@ -42,8 +68,8 @@ const ProfileScreen = ({ emplyoeeData }) => {
       width: 300,
       height: 400,
       cropping: true,
-      })(image => {
-        console.log(image.path);
+    })(image => {
+      console.log(image.path);
     });
   }
 
@@ -56,10 +82,10 @@ const ProfileScreen = ({ emplyoeeData }) => {
         left: 0,
         right: 0,
         zIndex: 3,
-        padding: 6,
+        padding: 8,
         backgroundColor: Colors.primary,
         opacity: scrollY.interpolate({
-          inputRange: [90, 120],
+          inputRange: [130, 200],
           outputRange: [0, 1]
         }),
         transform: [{
@@ -71,7 +97,11 @@ const ProfileScreen = ({ emplyoeeData }) => {
         }]
       }]}>
         <Text style={Styles.EmpName}>{emplyoeeData.full_name}</Text>
-        <Text style={Styles.designation}>{emplyoeeData.designationlookupdetails.longname}</Text>
+        {emplyoeeData.length !== 0 ?
+          <Text style={Styles.designation}>{emplyoeeData.designationlookupdetails.longname}</Text>
+          :
+          <Text>-</Text>
+        }
       </Animated.View>
 
       {/* Profile Image View */}
@@ -88,51 +118,16 @@ const ProfileScreen = ({ emplyoeeData }) => {
         <Header />
         <View style={{ flex: 1 }}>
           <View style={Styles.profilImgView}>
-            <Image source={{uri: `http://3.111.227.14:8092${emplyoeeData.profile_pic}`}} style={Styles.ProfileImg}></Image>
+            <Image source={{ uri: `http://3.111.227.14:8092${emplyoeeData.profile_pic}` }} style={Styles.ProfileImg}></Image>
           </View>
-          <View style={{
-            position: "absolute",
-            alignItems: "center",
-            justifyContent: "center", right: 156, top: 125, width: 25, height: 25, borderRadius: 12, backgroundColor: "red"
-          }} >
-            {/* Uploading Image */}
-            <TouchableOpacity onPress={uploadImage}>
-              <Text style={{ fontSize: 22 }}>+</Text>
-            </TouchableOpacity>
 
-            <Modal animationType='fade' visible={visible} transparent={true}>
-              <View style={Styles.modalMainContainer}>
-                <View style={Styles.modalView}>
-                  <IonIcon name='camera' size={ICONSIZES.medium} />
-                  <TouchableOpacity onPress={clickFromcamera}>
-                    <Text style={Styles.modalText}>Take Photo</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={Styles.modalView}>
-                  <IonIcon name='image-size-select-actual' size={ICONSIZES.medium} />
-                  <TouchableOpacity onPress={chooseFromLibrary}>
-                    <Text style={Styles.modalText} >Choose from Gallery</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={Styles.modalView}>
-                  <IonIcon name="close" size={ICONSIZES.medium} />
-                  <TouchableOpacity onPress={() => {
-                    setVisible(false)
-                  }}>
-                    <Text style={Styles.modalText}>Cancel</Text>
-                  </TouchableOpacity>
-                </View>
-
-              </View>
-
-
-
-            </Modal>
-
-          </View>
           <View style={Styles.TextView}>
             <Text style={Styles.EmpName}>{emplyoeeData.full_name}</Text>
-            <Text style={Styles.designation}>{emplyoeeData.designationlookupdetails.longname}</Text>
+            {emplyoeeData.length !== 0 ?
+              <Text style={Styles.designation}>{emplyoeeData.designationlookupdetails.longname}</Text>
+              :
+              <Text>-</Text>
+            }
           </View>
           {/* Employee Details */}
           <View style={Styles.EmpDetailsHeader}>
@@ -185,7 +180,11 @@ const ProfileScreen = ({ emplyoeeData }) => {
             </View>
             <View style={Styles.EmpDetView}>
               <Text style={Styles.EmpDetTitleText}>Blood Group</Text>
-              <Text style={Styles.EmpDetTitleValue}>{emplyoeeData.bloodgrouplookupdetails.longname}</Text>
+              {emplyoeeData.length !== 0 ?
+                <Text style={Styles.EmpDetTitleValue}>{emplyoeeData.bloodgrouplookupdetails.longname}</Text>
+                :
+                <Text>-</Text>
+              }
             </View>
           </View>
 
@@ -209,7 +208,12 @@ const ProfileScreen = ({ emplyoeeData }) => {
             </View>
             <View style={Styles.EmpDetView}>
               <Text style={Styles.EmpDetTitleText}>Personal Email</Text>
-              <Text style={Styles.EmpDetTitleValue}>{emplyoeeData.contactdetails.contact_id}</Text>
+              {emplyoeeData.length !== 0 ?
+                <Text style={Styles.EmpDetTitleValue}>{emplyoeeData.contactdetails.contact_id}</Text>
+                :
+                <Text>-</Text>
+              }
+
             </View>
           </View>
 
@@ -270,20 +274,22 @@ const ProfileScreen = ({ emplyoeeData }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
+
   )
 }
 
 const mapStateToProps = (state) => {
   return {
+    userData: state.userData,
     emplyoeeData: state.emplyoeeData
   }
 }
 
-export default connect(mapStateToProps, null)(ProfileScreen)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storeEmplyoeeData: (emplyoeeData) => dispatch(storeEmplyoeeData(emplyoeeData)),
 
-// const styles = StyleSheet.create({
-//   indicatorStyle: {
-//     backgroundColor: 'rgb(0 122 255)',
-//     height: 5,
-//   }
-// });
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen)

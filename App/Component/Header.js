@@ -5,7 +5,9 @@ import { useNavigation } from '@react-navigation/native'
 import { connect} from 'react-redux'
 
 
-const Header = ({ emplyoeeData }) => {
+
+const Header = ({ emplyoeeData}) => {
+    // console.log("Employee data from header component",emplyoeeData)
     const navigation = useNavigation();
     return (
         <View style={Styles.headerMainView}>

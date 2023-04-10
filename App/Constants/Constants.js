@@ -10,6 +10,8 @@ export const screenNames = {
     Profile_screen:`Profile`,
     Time_Sheet:`TimeSheet`,
     TimeSheet_form:`Create Time Sheet`,
+    Leaves:`Leave`,
+    Leaves_Used : `Back`,
     Demo:`Demo`
 
 

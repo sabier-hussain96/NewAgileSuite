@@ -33,7 +33,7 @@ const GET = async(EndPoint,OnSuccess) =>{
 }
 
 const handleErrorResponse = error => {
-  console.log(`error`, error);
+  // console.log(`error`, error);
   Toast.show(error);
 };
 

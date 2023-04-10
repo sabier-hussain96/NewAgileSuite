@@ -1,44 +1,50 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Image, KeyboardAvoidingView, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { connect } from 'react-redux';
+import { setClientToken } from '../api/Api';
+import { POST } from '../api/ApiMethods';
+import * as EndPoint from '../api/Endpoints';
 import EyeIcon from '../Assets/Icons/EyeIcon';
 import EyeoffIcon from '../Assets/Icons/EyeoffIcon';
 import { FormTextInput } from '../Component/FormInput';
 import { FORM_INPUT_RULES, INPUT_FIELD_NAME, INPUT_PLACE_HOLDER_CONSTANTS, screenNames, stringConstants } from '../Constants/Constants';
 import { Colors, Styles } from '../Global/ApplicationCss';
-import { login } from '../Redux/Actions/commonActions';
+import {storeUserData } from '../Redux/Actions/commonActions';
 
 
 
-const Login = ({login}) => {
+const Login = ({ storeUserData }) => {
     const navigation = useNavigation()
     const { control, handleSubmit, formState } = useForm();
     const [secureText, setSecuretext] = useState(true)
 
-    const [disabled,setDisabled] = useState(false)
+    const [disabled, setDisabled] = useState(false)
 
     const Sigin = async (data) => {
-        console.log(data)
         setDisabled(true)
-      const requestData ={
-        email:data.Username,
-        password:data.Pin
-      }
-        login(requestData, async response => {
-            const token = response.data.access_token
-            const userId = JSON.stringify(response.data.userdata.hr_employee.id)
-            console.log(response.status);
-            if(response.status === 200){
-                navigation.replace(screenNames.DashBoard) 
-            }else
-            {
-                navigation.replace(screenNames.Login) 
-            }         
-         } )
+        const requestData = {
+            email: data.Username,
+            password: data.Pin
+        }
+        const endpoints = `${EndPoint.login_URL}?email=${requestData.email}&password=${requestData.password}`;
+        POST(endpoints, response => {
+            if (response.status === 200) {
+                setClientToken(response.data.access_token)
+                AsyncStorage.setItem('token', response.data.access_token);
+                AsyncStorage.setItem('user_Data', JSON.stringify(response.data.userdata))
+                storeUserData(response.data.userdata);
+                navigation.replace(screenNames.DashBoard)
+            } else {
+                navigation.replace(screenNames.Login)
+            }
+        })
+
     }
+
 
     const handleSecuretext = () => {
         setSecuretext(false)
@@ -47,6 +53,7 @@ const Login = ({login}) => {
     const handleSecuretextOut = () => {
         setSecuretext(true)
     }
+
     return (
         <KeyboardAvoidingView style={[Styles.mainConatiner, { backgroundColor: Colors.primary }]}>
             <View style={{ alignItems: "center" }}>
@@ -78,7 +85,7 @@ const Login = ({login}) => {
                     defaultValue={stringConstants.EMPTY}
                     rules={FORM_INPUT_RULES.pinRule}
                     placeholder={INPUT_PLACE_HOLDER_CONSTANTS.USER_PIN}
-                  
+
 
                     icon={
 
@@ -100,13 +107,13 @@ const Login = ({login}) => {
                 </View>
                 <View style={[Styles.buttonView, { backgroundColor: disabled !== false ? Colors.primary : Colors.buttons }]}>
                     <TouchableOpacity disabled={disabled} onPress={handleSubmit(Sigin)}>
-                        {disabled !== false  ?   
-                        <ActivityIndicator style={{marginTop:8}} />
-                        :
+                        {disabled !== false ?
+                            <ActivityIndicator style={{ marginTop: 8 }} />
+                            :
 
-                        <Text style={Styles.buttonText}>LOGIN</Text>
-                    }
-                     
+                            <Text style={Styles.buttonText}>LOGIN</Text>
+                        }
+
                     </TouchableOpacity>
                 </View>
             </View>
@@ -114,11 +121,15 @@ const Login = ({login}) => {
     )
 }
 
-const mapDispatchToProps = (dispatch) =>{
-  return{
-    login: (requestData, onResponse) =>
-    dispatch(login(requestData, onResponse)),
-  }
+const mapStateToProps = state => ({
+    userData: state.userData
+});
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        storeUserData: (userData) => dispatch(storeUserData(userData)),
+    }
 }
 
-export default connect(null,mapDispatchToProps) (Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,29 +1,45 @@
 import { View, Text, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState, useReducer } from 'react'
+import React, { useState,useEffect, useReducer } from 'react'
 import { Colors } from '../Global/ApplicationCss'
 import { InitialState, todoReducer } from '../Component/TodoReducer'
 import TodoList from '../Component/TodoList'
 import { connect } from 'react-redux'
+import * as EndPoint from '../api/Endpoints'
+import { GET } from '../api/ApiMethods'
+import { storeEmplyoeeData } from '../Redux/Actions/commonActions'
 
 
 const Todo = ({userData}) => {
   const [input, setInput] = useState('')
   const [state, dispatch] = useReducer(todoReducer, InitialState)
 
-  const handleTodo = () => {
-   
+  // useEffect(() => {
+  //   let mounted = true;
+  //   if (mounted) {
+  //     fetchEmployeDetail()
+  //   }
 
+  //   return () => {
+  //     mounted = false;
+  //   }
+  // }, [])
+
+
+  // const fetchEmployeDetail = async () => {
+  //   const endpoints = `${EndPoint.employee_details_URL}?id=${userData.emp_id}`
+  //   GET(endpoints, response => {
+  //     if (response.data.status === 'S') {
+  //       storeEmplyoeeData(response.data.employee_data)
+  //     }
+
+  //   });
+  // }
+
+  const handleTodo = () => {
     dispatch({ type: 'ADD_TODO', payload:{name:input} })
     setInput('')
   }
 
-  // const Increase = () => {
-  //   dispatch({type:'Increase'})
-  // }
-
-  // const Decrease = () => {
-  //   dispatch({type:'Descrease'})
-  // }
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: '#FFFFFF' }}>
       <Text style={{ marginBottom: 20, fontWeight: '700' }}>Todo List</Text>
@@ -36,7 +52,14 @@ const Todo = ({userData}) => {
   )
 }
 const mapStateToProps = state => ({
-  
-  userData: state.userData,
+  userData: state.userData, 
+  // emplyoeeData: state.emplyoeeData
 });
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     storeEmplyoeeData: (emplyoeeData) => dispatch(storeEmplyoeeData(emplyoeeData)),
+
+//   }
+// }
 export default connect(mapStateToProps,null) (Todo)

@@ -4,7 +4,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Header from '../Component/Header';
 import AssignManager from './AssignManager';
 import GeneralHoliday from './GeneralHoliday';
-import Leaves from './Leaves';
+import LeavesDashboard from './LeavesDashBoard';
 import Todo from './Todo';
 
 const FirstRoute = () => (
@@ -13,7 +13,7 @@ const FirstRoute = () => (
 );
 
 const SecondRoute = () => (
-  <Leaves />
+  <LeavesDashboard />
 
 );
 const ThirdRoute = () => (
